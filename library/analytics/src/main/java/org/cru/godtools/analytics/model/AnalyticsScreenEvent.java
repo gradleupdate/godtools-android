@@ -15,6 +15,7 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     /* Screen event names */
     public static final String SCREEN_HOME = "Home";
     public static final String SCREEN_FIND_TOOLS = "Find Tools";
+    public static final String SCREEN_ALL_TOOLS = "All Tools";
     public static final String SCREEN_TOOL_DETAILS = "Tool Info";
     public static final String SCREEN_LANGUAGE_SETTINGS = "Language Settings";
     public static final String SCREEN_LANGUAGE_SELECTION = "Select Language";

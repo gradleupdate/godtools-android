@@ -37,6 +37,7 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
@@ -54,6 +55,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     private static final int STATE_MY_TOOLS = 0;
     private static final int STATE_FIND_TOOLS = 1;
+    private static final int STATE_ALL_TOOLS = 2;
 
     @NonNull
     /*final*/ Handler mTaskHandler;
@@ -62,6 +64,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private TabLayout.Tab mMyToolsTab;
     @Nullable
     private TabLayout.Tab mFindToolsTab;
+    @Nullable
+    private TabLayout.Tab mAllToolsTab;
     @Nullable
     TapTargetView mFeatureDiscovery;
 
@@ -147,6 +151,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             showMyTools();
         } else if (tab == mFindToolsTab) {
             showAddTools();
+        } else if (tab == mAllToolsTab) {
+            showAllTools();
         } else if (BuildConfig.DEBUG) {
             // The tab selection logic is brittle, so throw an error in unrecognized scenarios
             throw new IllegalArgumentException("Unrecognized tab!! something changed with the navigation tabs");
@@ -241,6 +247,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 case STATE_FIND_TOOLS:
                     mEventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
                     break;
+                case STATE_ALL_TOOLS:
+                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_ALL_TOOLS));
+                    break;
                 case STATE_MY_TOOLS:
                 default:
                     mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
@@ -267,6 +276,17 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         selectNavigationTabIfNecessary(mMyToolsTab);
         mActiveState = STATE_MY_TOOLS;
+        trackInAnalytics();
+    }
+
+    private void showAllTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ALL), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mAllToolsTab);
+        mActiveState = STATE_ALL_TOOLS;
         trackInAnalytics();
     }
 

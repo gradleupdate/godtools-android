@@ -65,6 +65,7 @@ public class ToolsFragment extends BasePlatformFragment
 
     public static final int MODE_ADDED = 1;
     public static final int MODE_AVAILABLE = 2;
+    public static final int MODE_ALL = 3;
 
     private static final int LOADER_TOOLS = 101;
 
@@ -441,6 +442,7 @@ public class ToolsFragment extends BasePlatformFragment
                 case MODE_ADDED:
                 case MODE_AVAILABLE:
                     return where.and(ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED));
+                case MODE_ALL:
                 default:
                     return where;
             }
@@ -453,6 +455,7 @@ public class ToolsFragment extends BasePlatformFragment
                 case MODE_ADDED:
                     return ToolTable.COLUMN_ORDER;
                 case MODE_AVAILABLE:
+                case MODE_ALL:
                 default:
                     return null;
             }
