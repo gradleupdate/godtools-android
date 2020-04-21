@@ -151,6 +151,17 @@ public class PageViewHolder extends ParentViewHolder<Page>
         propagateEventToChildren(event);
     }
 
+    public void onBroadcastEvent(@NonNull final NavigationEvent event) {
+        if (mModel != null && Integer.valueOf(mModel.getPosition()).equals(event.getPage())) {
+            final Card card = event.getCard() != null ? mModel.getCards().get(event.getCard()) : null;
+            if (card != null) {
+                displayCard(card);
+            } else {
+                mPageContentLayout.changeActiveCard(null, true);
+            }
+        }
+    }
+
     @Override
     public void onActiveCardChanged(@Nullable final View activeCard) {
         if (!mBindingCards) {

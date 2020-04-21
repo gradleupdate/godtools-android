@@ -149,6 +149,15 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         }
     }
 
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    public void onBroadcastEvent(@NonNull final NavigationEvent event) {
+        final RVPageViewHolder holder = getPrimaryItem();
+        if (holder != null) {
+            holder.onBroadcastEvent(event);
+        }
+    }
+
     @Override
     protected void onViewHolderRecycled(@NonNull final RVPageViewHolder holder) {
         super.onViewHolderRecycled(holder);
@@ -196,6 +205,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             if (mPage != null) {
                 checkForModalEvent(event);
             }
+        }
+
+        void onBroadcastEvent(@NonNull final NavigationEvent event) {
+            mModelViewHolder.onBroadcastEvent(event);
         }
 
         @Override
