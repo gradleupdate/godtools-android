@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation project(':library:api')
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
@@ -52,6 +53,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
