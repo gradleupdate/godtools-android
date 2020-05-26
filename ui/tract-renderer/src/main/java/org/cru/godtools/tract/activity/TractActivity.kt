@@ -17,6 +17,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
