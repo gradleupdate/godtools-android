@@ -41,7 +41,6 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
-import org.cru.godtools.tract.liveshare.Event
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.util.ViewUtils
@@ -53,6 +52,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import javax.inject.Inject
+import org.cru.godtools.tract.liveshare.Event as LiveShareEvent
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
@@ -134,7 +134,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
             true
         }
         item.itemId == R.id.action_live_share_publish -> {
-            publisherController.stateMachine.transition(Event.Start)
+            publisherController.stateMachine.transition(LiveShareEvent.Start)
             true
         }
         // handle close button if this is an instant app
