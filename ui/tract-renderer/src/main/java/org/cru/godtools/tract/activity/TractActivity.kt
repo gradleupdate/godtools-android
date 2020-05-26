@@ -16,6 +16,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
@@ -50,6 +51,7 @@ import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.TractPublisherController
+import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.xml.model.Card
@@ -106,6 +108,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
         setupActiveTranslationManagement()
         binding = TractActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        startLiveShareSubscriberIfNecessary()
     }
 
     override fun onContentChanged() {
@@ -414,6 +417,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
 
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
+    private val subscriberController: TractSubscriberController by viewModels()
 
     fun shareLiveShareLink() {
         if (publisherController.publisherInfo.value == null) {
@@ -427,6 +431,20 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
         publisherController.sendNavigationEvent(
             NavigationEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
         )
+    }
+
+    private fun startLiveShareSubscriberIfNecessary() {
+        val streamId = intent?.data?.getQueryParameter(PARAM_LIVE_SHARE_STREAM) ?: return
+
+        subscriberController.channelId = streamId
+        subscriberController.receivedEvent.notNull().distinctUntilChanged()
+            .observe(this) { it -> navigateToLiveShareEvent(it) }
+    }
+
+    private fun navigateToLiveShareEvent(event: NavigationEvent?) {
+        if (event == null) return
+        event.page?.let { goToPage(it) }
+        eventBus.post(event)
     }
     // endregion Live Share Logic
 
